@@ -4,7 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zedcore"
-version = "0.0.1"
+version = "0.0.0"
+# Note: "0.0.0" corresponds to spec Revision 0.ZERO (also reflected in
+# zedcore.__version__ == "0.ZERO"); PEP 440 requires numeric segments.
 description = "ZedCore programming language runtime — Revision 0.ZERO"
 readme = "README.md"
 license = { file = "LICENSE" }

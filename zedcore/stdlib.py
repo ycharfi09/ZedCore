@@ -18,30 +18,6 @@ from .values import (
 from .errors import ZedRuntimeError
 
 
-# ── Helper: call a ZedCore function value with one arg ─────────────────────
-
-def _apply_one(func: Any, arg: Any, interpreter: Any) -> Any:
-    """Apply a ZedCore callable to one argument."""
-    from .values import ZedFunction, ZedBuiltin, ZedPartial
-    if isinstance(func, ZedPartial):
-        new_applied = func.applied + [arg]
-        return _try_call(func.func, new_applied, interpreter)
-    if isinstance(func, (ZedFunction, ZedBuiltin)):
-        return _try_call(func, [arg], interpreter)
-    raise ZedRuntimeError(f"Cannot apply {func!r} as a function")
-
-
-def _try_call(func: Any, args: List[Any], interpreter: Any) -> Any:
-    from .values import ZedFunction, ZedBuiltin
-    if isinstance(func, ZedBuiltin):
-        return func.func(*args)
-    if isinstance(func, ZedFunction):
-        if len(args) < len(func.params):
-            return ZedPartial(func=func, applied=args)
-        return interpreter.call_function(func, args)
-    raise ZedRuntimeError(f"Cannot call {func!r}")
-
-
 # ── String / sequence helpers ─────────────────────────────────────────────────
 
 def _to_zedlist(val: Any) -> Any:

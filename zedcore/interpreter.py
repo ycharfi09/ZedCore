@@ -54,9 +54,8 @@ def _apply_value(func: Any, args: List[Any]) -> Any:
                 raise ZedRuntimeError("No active interpreter for function call")
             result = interp.call_function(result, [arg])
         elif isinstance(result, ZedPartial):
-            new_applied = result.applied + [arg]
-            result = _apply_value(result.func, [arg] if not result.applied
-                                  else result.applied + [arg])
+            # Accumulate the new argument with previously applied ones
+            result = _apply_value(result.func, result.applied + [arg])
         elif result is Z:
             # z annihilates application in forward direction (Rule Ƶ-zero)
             result = Z

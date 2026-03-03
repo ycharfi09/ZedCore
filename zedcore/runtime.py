@@ -36,14 +36,16 @@ def _exit_xor(a: Any, b: Any) -> Any:
     The zero term `z` maps to integer 0 for the XOR computation.
     """
     from .values import Z, _ZeroTermClass
-    a_int = 0 if (a is Z or isinstance(a, _ZeroTermClass)) else (
+    # The zero term z corresponds to exit-code 0 (clean / no-fault)
+    _ZERO_EXIT: int = 0
+    a_int = _ZERO_EXIT if (a is Z or isinstance(a, _ZeroTermClass)) else (
         a if isinstance(a, int) else 1
     )
-    b_int = 0 if (b is Z or isinstance(b, _ZeroTermClass)) else (
+    b_int = _ZERO_EXIT if (b is Z or isinstance(b, _ZeroTermClass)) else (
         b if isinstance(b, int) else 1
     )
     result = a_int ^ b_int
-    if result == 0:
+    if result == _ZERO_EXIT:
         return Z
     return result
 
