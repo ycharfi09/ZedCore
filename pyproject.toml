@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zedcore"
+version = "0.0.0"
+# Note: "0.0.0" corresponds to spec Revision 0.ZERO (also reflected in
+# zedcore.__version__ == "0.ZERO"); PEP 440 requires numeric segments.
+description = "ZedCore programming language runtime — Revision 0.ZERO"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+keywords = ["programming-language", "interpreter", "zedcore", "zedsyntax"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Interpreters",
+]
+
+[project.scripts]
+zrun = "zedcore.__main__:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-cov"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["zedcore*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"
+
+[tool.coverage.run]
+source = ["zedcore"]
+omit = ["tests/*"]
