@@ -1,0 +1,2 @@
+[console_scripts]
+zrun = zedcore.__main__:main

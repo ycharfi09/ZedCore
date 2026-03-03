@@ -1,0 +1,24 @@
+syntax { inherit ZedSyntax; }
+
+// §10 — Standard Library sketch: map over a sequence.
+//
+// Demonstrates define/undefine symmetry (§8) and sequence operations.
+
+define double (x) {
+  x * 2
+}
+
+define square (x) {
+  x * x
+}
+
+define main {
+  outward "map double over [1,2,3,4,5]:"
+  items ← 1 :: 2 :: 3 :: 4 :: 5 :: z
+  result ← map -> double -> items
+  outward result
+
+  outward "map square over [1,2,3]:"
+  items2 ← 1 :: 2 :: 3 :: z
+  outward map -> square -> items2
+}

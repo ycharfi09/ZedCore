@@ -1,0 +1,17 @@
+syntax { inherit ZedSyntax; }
+
+// §8.4 — Retrograde I/O Model example.
+//
+// Forward pass:  reads a line from stdin, echoes it to stdout.
+// Retrograde:    reads back what was written and verifies the round-trip.
+//
+// Usage:  echo "hello" | zrun verify_loop.zed
+
+define verify-loop {
+  value ← inward
+  outward value
+}
+
+define main {
+  verify-loop
+}

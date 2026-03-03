@@ -1,0 +1,76 @@
+syntax { inherit ZedSyntax; }
+
+// §11 — IBAN Validator — Working Example
+//
+// Validates an IBAN on the forward pass and reconstructs the original input
+// on the retrograde pass (demonstrating reversible computation).
+//
+// Usage:  echo "GB82WEST12345698765432" | zrun iban_validator.zed
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+define char-to-num (c) {
+  when c >= 'A' { outward (c - 'A') + 10 }
+  otherwise     { outward (c - '0')      }
+}
+
+define num-to-char (n) {
+  when n >= 10  { outward (n - 10) + 'A' }
+  otherwise     { outward n + '0'        }
+}
+
+define reorder (iban) {
+  outward (iban.slice(4)) :: (iban.slice(0, 4))
+}
+
+define to-numeric-string (s) {
+  outward map -> char-to-num -> s
+}
+
+define mod97 (digits) {
+  acc ← 0
+  cycle chunk ← digits.chunks(9) until digits.empty {
+    acc ← ((acc :: chunk).as-integer % 97)
+  }
+  outward acc
+}
+
+define validate (iban) {
+  clean     ← iban.strip-spaces.to-upper
+  reordered ← reorder -> clean
+  numeric   ← to-numeric-string -> reordered
+  remainder ← mod97 -> numeric
+  outward remainder = 1
+}
+
+// ── Retrograde functions ──────────────────────────────────────────────────────
+
+undefine validate (iban) {
+  result ← inward
+  outward result
+}
+
+undefine main {
+  status  ← inward
+  echoed  ← inward
+  prompt2 ← inward
+  title   ← inward
+  outward "Reconstructed input: " :: echoed
+}
+
+// ── Entry point ───────────────────────────────────────────────────────────────
+
+define main {
+  outward "ZedCore IBAN Validator"
+  outward "Enter IBAN: "
+  iban  ← inward
+  valid ← validate -> iban
+
+  when valid {
+    outward "VALID"
+    outward iban
+  } otherwise {
+    outward "INVALID"
+    outward iban
+  }
+}

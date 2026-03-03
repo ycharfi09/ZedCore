@@ -1,0 +1,18 @@
+syntax { inherit ZedSyntax; }
+
+// The canonical first program in ZedSyntax (§6.3 of the spec).
+//
+// Forward execution prints:
+//   Hello, Zero.
+//   z
+//
+// Retrograde execution prints (in reverse order):
+//   z
+//   Hello, Zero.
+//
+// Exit code: z XOR z = z
+
+define main {
+  outward "Hello, Zero."
+  outward z
+}
